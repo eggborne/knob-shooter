@@ -21,6 +21,7 @@ export default {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+  padding: 2.5%;
 }
 #cash-display {
   background: rgb(119, 46, 46);

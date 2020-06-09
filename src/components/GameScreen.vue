@@ -34,6 +34,5 @@ export default {
 #game-area canvas {
   width: var(--game-screen-width);
   height: var(--game-screen-height);
-
 }
 </style>

@@ -95,34 +95,83 @@ export default {
   },
   mounted() {
     document.getElementById('game-area').appendChild(game.view);
-    document.getElementById('game-area').addEventListener('pointermove', (e) => {
-      if (game.counter > 10) {
-        const posX = e.clientX - document.getElementById('game-area').offsetLeft;
-        const posY = e.clientY - document.getElementById('game-area').offsetTop;
-        if (posX && posY) {
-          this.$store.commit('updateCursorPosition', {x: posX, y: posY});
-        }
-      }
-    });
     document.getElementById('game-area').addEventListener('pointerdown', (e) => {
+      e.preventDefault();
       if (game.counter > 10) {
-        const posX = e.clientX - document.getElementById('game-area').offsetLeft;
-        const posY = e.clientY - document.getElementById('game-area').offsetTop;
+        console.log('touched', Math.round(e.pageX), Math.round(e.pageY))
+        const posX = e.pageX;
+        const posY = e.pageY;
+        // const posX = e.clientX - document.getElementById('game-area').offsetLeft;
+        // const posY = e.clientY - document.getElementById('game-area').offsetTop;
         if (posX && posY) {
           this.$store.commit('updateCursorPosition', {x: posX, y: posY});
         }
       }
-      this.$store.commit('setFireButtonDown', true);
-    });
-    document.getElementById('game-area').addEventListener('pointerup', (e) => {
-      this.$store.commit('setFireButtonDown', false);
-    });
+      // this.$store.commit('setFireButtonDown', true);
+    }, false);
+    // document.getElementById('game-area').addEventListener('pointermove', (e) => {
+    //   if (game.counter > 10) {
+    //     console.log('moved', Math.round(e.pageX), Math.round(e.pageY));
+    //      const posX = e.pageX;
+    //     const posY = e.pageY;
+    //     // const posX = e.clientX - document.getElementById('game-area').offsetLeft;
+    //     // const posY = e.clientY - document.getElementById('game-area').offsetTop;
+    //     if (posX && posY) {
+    //       this.$store.commit('updateCursorPosition', {x: posX, y: posY});
+    //     }
+    //   }
+    // });
+    document.getElementById('game-area').addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (game.counter > 10) {
+        // const posX = e.changedTouches[0].pageX;
+        // const posY = e.changedTouches[0].pageY;
+
+        const touch = e.originalEvent ? e.originalEvent.touches[0] : e.changedTouches[0];
+
+        const posX = touch.pageX;
+        const posY = touch.pageY;
+
+        console.log('moved', e, Math.round(posX), Math.round(posY));
+        // const posX = e.clientX - document.getElementById('game-area').offsetLeft;
+        // const posY = e.clientY - document.getElementById('game-area').offsetTop;
+        if (posX && posY) {
+          this.$store.commit('updateCursorPosition', {x: posX, y: posY});
+        }
+      }
+    }, false);
+    // document.getElementById('game-area').addEventListener('touchmove', (e) => {
+    //   if (game.counter > 10) {
+    //     console.log('moved', e)
+    //     const clientX = e.clientX || e.targetTouches[0].clientX;
+    //     const clientY = e.clientY || e.targetTouches[0].clientY;
+    //     const posX = clientX - document.getElementById('game-area').offsetLeft;
+    //     const posY = clientY - document.getElementById('game-area').offsetTop;
+    //     if (posX && posY) {
+    //       this.$store.commit('updateCursorPosition', {x: posX, y: posY});
+    //     }
+    //   }
+    // });
+
+    // document.getElementById('game-area').addEventListener('touchstart', (e) => {
+    //   console.log('touched', e)
+    //   const clientX = e.clientX || e.targetTouches[0].clientX;
+    //   const clientY = e.clientY || e.targetTouches[0].clientY;
+    //   if (game.counter > 10) {
+    //     const posX = clientX - document.getElementById('game-area').offsetLeft;
+    //     const posY = clientY - document.getElementById('game-area').offsetTop;
+    //     if (posX && posY) {
+    //       this.$store.commit('updateCursorPosition', {x: posX, y: posY});
+    //     }
+    //   }
+    //   // this.$store.commit('setFireButtonDown', true);
+    // });
+    // document.getElementById('game-area').addEventListener('pointerup', (e) => {
+    //   this.$store.commit('setFireButtonDown', false);
+    // });
 
     game.ticker.add(() => {
       if (game.counter === 0 && this.$store.state.gameStarted) {
-        const egg = new EntityConstructor.Ship(game, 'egg', game.center.x);
-        egg.spawn();
-        game.ships.push(egg);
         player = new EntityConstructor.Ship(game, 'player', game.center.x, 0, this.$store.state.fireRate, this.$store.state.penetration, this.$store.state.bulletSize, this.$store.state.attractPower);
         player.spawn();
         player.container.x = game.view.width / window.devicePixelRatio / 2;
@@ -147,12 +196,12 @@ export default {
       game.ships = game.ships.filter(ship => !ship.offscreen && ship.pieces[0].knobs.length);
 
       if (player && this.$store.state.gameStarted) {
-        if (game.counter > 10) {
+        if (true || game.counter > 10) {
           if (game.counter % 360 === 0) {
             const randomType = randomInt(0, 1) ? 'egg' : 'saucer';
-            const egg = new EntityConstructor.Ship(game, randomType, game.center.x + randomInt((-game.view.width / window.devicePixelRatio) / 4, (game.view.width / window.devicePixelRatio) / 4));
-            egg.spawn();
-            game.ships.push(egg);
+            const newRandomEnemy = new EntityConstructor.Ship(game, randomType, game.center.x + randomInt((-game.view.width / window.devicePixelRatio) / 4, (game.view.width / window.devicePixelRatio) / 4));
+            newRandomEnemy.spawn();
+            game.ships.push(newRandomEnemy);
           }
           const offLeftBounds = player.container.width / 2;
           const offRightBounds = (game.view.width / window.devicePixelRatio) - player.container.width / 2;

@@ -4,9 +4,15 @@ import { pointAtAngle, randomInt, degToRad } from '../App';
 const cashKnobTypes = {
   green: {
     color: 0x00aa00,
-    value: 1
-  }
-}
+    value: 1,
+    size: 0.5
+  },
+  largeGreen: {
+    color: 0x55ff55,
+    value: 5,
+    size: 1
+  },
+};
 
 export class Knob {
   constructor(type, owner, color, posX, posY, texture, angleAway, distanceAway, maxHP) {
@@ -84,8 +90,9 @@ export class Knob {
       if (this.sprite.width <= this.owner.knobSize / 64) {
         this.dead = true;
         this.doomed = false;
-        if (this.initialIndex % this.owner.owner.cashKnobFrequency == 0) {
-          new cashKnob(this.owner.game, 'green', this.owner.owner.container.x + this.container.x, this.owner.owner.container.y + this.container.y);
+        if (this.initialIndex % this.owner.owner.cashKnobFrequency === 0) {
+          const cashKnobType = this.owner.knobs.length > 1 ? 'green' : 'largeGreen';
+          new cashKnob(this.owner.game, cashKnobType, this.owner.owner.container.x + this.container.x, this.owner.owner.container.y + this.container.y);
         }
       }
     } else {
@@ -104,7 +111,7 @@ export class Knob {
 export class Bullet {
   constructor(owner, firingKnob, penetration, size, startX, startY) {
     this.sprite = new Sprite(owner.game.loader.resources['knob'].texture);
-    this.sprite.cacheAsBitmap = true;
+    // this.sprite.cacheAsBitmap = true;
     this.sprite.width = size;
     this.sprite.height = size;
     this.sprite.anchor.set(0.5);
@@ -124,8 +131,8 @@ export class cashKnob {
   constructor(game, type, posX, posY) {
     this.game = game;
     this.sprite = new Sprite(game.loader.resources['knob'].texture);
-    this.sprite.width = game.knobSize / 2;
-    this.sprite.height = game.knobSize / 2;
+    this.sprite.width = game.knobSize * cashKnobTypes[type].size;
+    this.sprite.height = game.knobSize * cashKnobTypes[type].size;
     this.sprite.x = posX;
     this.sprite.y = posY;
     this.sprite.anchor.set(0.5);

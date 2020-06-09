@@ -11,7 +11,7 @@ const shipDesigns = {
       {
         position: { x: 0, y: 0 },
         tiers: [0, 2, 2, 3],
-        color: 0x00aa00,
+        color: 0x00ff00,
         spinSpeed: 3,
         gunKnobs: [
           [],
@@ -55,7 +55,7 @@ const shipDesigns = {
         position: { x: 0, y: 0 },
         tiers: [2, 3, 6, 3, 2],
         color: 0xff4444,
-        knobHP: 3,
+        knobHP: 2,
         spinSpeed: 1.5
       }
     ],
@@ -80,7 +80,6 @@ export class Ship {
     this.penetration = penetration;
     this.bulletSize = bulletSize;
     this.cashKnobFrequency = shipDesigns[this.type].cashKnobFrequency;
-
     this.vectorAngle = 0;
     this.vectorDistance;
     this.offscreen = false;

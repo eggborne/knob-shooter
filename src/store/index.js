@@ -13,10 +13,10 @@ export default new Vuex.Store({
     playerCash: 0,
     autoFire: true,
     fireButtonDown: false,
-    fireRate: 16,
+    fireRate: 14,
     penetration: 1,
     bulletSize: 0.5,
-    attractPower: 5
+    attractPower: 3
   },
   mutations: {
     toggleGameStarted(state) {
