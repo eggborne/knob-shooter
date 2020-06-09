@@ -5,6 +5,8 @@ import store from './store'
 
 Vue.config.productionTip = false
 
+document.documentElement.style.setProperty('--device-height', `${window.innerHeight}px`);
+
 new Vue({
   store,
   render: h => h(App)
